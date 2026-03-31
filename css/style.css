@@ -1,78 +1,186 @@
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial; }
-
-body { color: #222; }
-
-.container { max-width: 1200px; margin: auto; padding: 20px; }
-
-.owerfloy-div {
-  display: none;
-  position: fixed;
-  z-index: 2;
-  background-color: #ececec83;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
+/* Базовые настройки */
+* { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
+  font-family: Arial, sans-serif; /* Добавлен резервный шрифт */
 }
 
-.owerfloy-div.active {
+body { 
+  color: #222; 
+  line-height: 1.5; /* Для лучшей читаемости текста */
+}
+
+.container { 
+  max-width: 1200px; 
+  margin: auto; 
+  padding: 20px; 
+}
+
+/* Затемнение фона при открытии мобильного меню */
+.overflow-div {
+  display: none;
+  position: fixed;
+  z-index: 990; /* Должно быть ниже меню, но выше контента */
+  background-color: rgba(0, 0, 0, 0.5); /* Более классическое затемнение */
+  inset: 0; /* Заменяет left/top/right/bottom: 0 */
+}
+
+.overflow-div.active {
   display: block;
 }
 
+/* Шапка сайта */
 .header { 
   background: #fff; 
   border-bottom: 1px solid #eee; 
   position: sticky;
-  z-index: 10;
+  z-index: 1000; /* Шапка всегда сверху */
   top: 0;
 }
-.header-row { display: flex; justify-content: space-between; align-items: center;     padding: 0 15px;}
+
+.header-row { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  padding: 0 15px;
+}
+
 .logo { 
   max-width: 55px;
   width: 100%;
 }
 
+/* Контакты в шапке */
 .header-contacts { 
   display: flex;
-  gap: 10px;
+  gap: 12px;
   align-items: center; 
+  padding: 15px;
 }
 
-.phone { text-decoration: none; color: #000; font-weight: bold; }
+.header-contacts__about {
+  display: none;
+}
 
-.icon-btn { text-decoration: none; color: #000; }
+.contact-arrow {
+  text-align: center;
+  color: #ff6600; 
+  margin-top: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  user-select: none;
+}
 
+/* Кнопки контактов (общие стили) */
+.contact-item, .contact-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-size: 16px;
+  text-decoration: none;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.contact-item i, .contact-btn i {
+  font-size: 20px;
+  width: 24px;
+  text-align: center;
+}
+
+.contact-item:hover, .contact-btn:hover {
+  transform: scale(1.03);
+  opacity: 0.95;
+}
+
+/* Цвета кнопок */
+.phone { background: #2c2c2c; color: #fff; }
+.whatsapp { background: #25D366; color: #fff; }
+.telegram { background: #229ED9; color: #fff; }
+.cancel { background: #eee; color: #333; }
+.instagram {
+  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  color: #fff;
+}
+
+/* Главная кнопка */
 .btn {
-    background: #ffd402;
-    border: none;
-    padding: 15px 25px;
-    cursor: pointer;
-    border-radius: 5px;
+  background: #ffd402;
+  border: none;
+  padding: 15px 25px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: bold;
 }
 
+.btn-large { 
+  font-size: 18px; 
+  margin-top: 20px; 
+  color: #000; 
+}
 
-.btn-large { font-size: 18px; margin-top: 20px; color: #000; }
+/* Главный экран (Hero) */
+.hero {
+  position: relative;
+  min-height: 60dvh;
+  background: url("../img/bnr.jpg") center / cover no-repeat;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  text-align: center; 
+  padding: 80px 20px; 
+}
 
-.hero { text-align: center; padding: 80px 20px; background: #f9f9f9; }
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+}
 
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.hero h1 {
+  font-size: 34px;
+  margin-bottom: 15px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 20px;
+  margin-bottom: 25px;
+}
+
+/* Сетки и карточки */
 .grid-3 {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
 }
 
 .services__title {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   display: block;
   text-align: center;
   font-size: 27px;
   border-bottom: 1px solid #ececec;
-  padding-bottom: 4px;
+  padding-bottom: 10px;
 }
 
 .grid-3__title {
-  margin-top: 6px;
+  margin-top: 10px;
   text-align: center;
+  font-size: 18px;
 }
 
 .adv-card {
@@ -81,12 +189,17 @@ body { color: #222; }
   text-align: center;
   border-radius: 10px;
   font-weight: bold;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05); /* Легкая тень для объема */
 }
 
-.card { background: #fff; padding: 15px; border-radius: 10px;     border: 1px solid #ececec;
-      display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+.card { 
+  background: #fff; 
+  padding: 15px; 
+  border-radius: 10px;     
+  border: 1px solid #ececec;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 img {
@@ -95,28 +208,37 @@ img {
   vertical-align: bottom;
 }
 
-.card img { width: 100%; border-radius: 10px; }
+.card img { 
+  width: 100%; 
+  border-radius: 8px; 
+}
 
 .gallery img { 
-    width: 100%; border-radius: 10px; 
-    height: 45dvh;
-    object-fit: cover;
+  width: 100%; 
+  border-radius: 10px; 
+  height: 45dvh;
+  object-fit: cover;
 }
 
+/* Подвал */
 .footer { 
-    background: #ffffff;
-    color: #000000;
-    text-align: center;
-    font-weight: 600;
+  background: #ffffff;
+  color: #000000;
+  text-align: center;
+  font-weight: 600;
+  padding: 20px 0;
+  border-top: 1px solid #eee;
 }
 
+/* Модальные окна (Попапы) */
 .popup {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.5);
+  background: rgba(0,0,0,.6);
   display: none;
   justify-content: center;
   align-items: center;
+  z-index: 10000;
 }
 
 .popup-content {
@@ -133,16 +255,26 @@ img {
   top: 10px;
   right: 15px;
   cursor: pointer;
+  font-size: 24px;
 }
 
 form input, form textarea {
   width: 100%;
   margin-bottom: 10px;
-  padding: 10px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
-.success { display: none; text-align: center; margin-top: 20px; }
+.success { 
+  display: none; 
+  text-align: center; 
+  margin-top: 20px; 
+  font-weight: bold;
+  color: #25D366;
+}
 
+/* Бургер-меню */
 .burger {
   display: none;
   flex-direction: column;
@@ -156,151 +288,31 @@ form input, form textarea {
   height: 3px;
   background: #000;
   border-radius: 2px;
-  transition: .3s;
+  transition: 0.3s;
 }
 
-/* крестик */
+/* Анимация крестика */
 .burger.active span:nth-child(1) {
   transform: rotate(45deg) translate(6px, 6px);
 }
-
 .burger.active span:nth-child(2) {
   opacity: 0;
 }
-
 .burger.active span:nth-child(3) {
   transform: rotate(-45deg) translate(6px, -6px);
 }
 
-.contact-btn {
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  padding:14px;
-  border-radius:10px;
-  font-size:17px;
-  text-decoration:none;
-  border:none;
-  cursor:pointer;
-  transition:0.2s;
-}
-
-.contact-btn i {
-  font-size:20px;
-}
-
-/* Цвета */
-.phone {
-  background:#2c2c2c;
-  color:#fff;
-}
-
-.whatsapp {
-  background:#25D366;
-  color:#fff;
-}
-
-.telegram {
-  background:#229ED9;
-  color:#fff;
-}
-
-.cancel {
-  background:#eee;
-  color:#333;
-}
-
-.contact-btn:hover {
-  transform:scale(1.03);
-}
-
-.header-contacts {
-  display:flex;
-  gap:12px;
-  padding:15px;
-}
-
-@media screen and (max-width: 479px) {
-  .header-contacts {
-  flex-direction:column;
-  }
-}
-
-.contact-item {
-  display:flex;
-  align-items:center;
-  gap:12px;
-  padding:14px 16px;
-  border-radius:12px;
-  font-size:16px;
-  text-decoration:none;
-  font-weight:500;
-  transition:0.2s;
-}
-
-.contact-item i {
-  font-size:20px;
-  width:24px;
-  text-align:center;
-}
-
-/* Цвета */
-.phone {
-  background:#2c2c2c;
-  color:#fff;
-  padding: 5px 10px;
-  border-radius: 5px;
-}
-
-.whatsapp {
-  background:#25D366;
-  color:#fff;
-  padding: 5px 10px;
-  border-radius: 5px;
-}
-
-.telegram {
-  background:#229ED9;
-  color:#fff;
-  padding: 5px 10px;
-  border-radius: 5px;
-}
-
-.contact-item:hover {
-  transform:scale(1.03);
-  opacity:0.95;
-}
-
-
-.instagram {
-  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-  color: #fff;
-  padding: 5px 10px;
-  border-radius: 5px;
-}
-
-.header-contacts__about {
-  display: none;
-}
-
-.contact-arrow {
-  text-align: center;
-  color: #ff6600; /* цвет стрелки/текста */
-  margin-top: 20px;
-  cursor: pointer;
-  font-weight: bold;
-  user-select: none;
-}
-
-/* MOBILE */
+/* МОБИЛЬНАЯ ВЕРСИЯ */
 @media (max-width: 479px) {
-
+  .header-contacts {
+    flex-direction: column;
+  }
+  
   .header-contacts__about {
     display: block;
-  font-size: 21px;
-  color: #000;
-}
+    font-size: 21px;
+    color: #000;
+  }
 
   .container.hero-content {
     padding: 0;
@@ -308,62 +320,36 @@ form input, form textarea {
 
   .burger {
     display: flex;
-    z-index: 9999;
   }
 
+  /* Выезжающее меню */
   .header-contacts {
     position: fixed;
     top: 0;
     right: -100%;
-    width: 70%;
+    width: 75%;
     height: 100dvh;
-    align-items: baseline;
+    align-items: stretch; /* Растягивает кнопки на всю ширину */
     background: #fff;
     flex-direction: column;
-    padding: 0 20px;
-    margin-top: 56px;
-    gap: 20px;
-    transition: .3s;
-    z-index: 1000;
+    padding: 20px;
+    padding-top: 80px; /* Отступ сверху для кнопок */
+    margin-top: 0;
+    gap: 15px;
+    transition: right 0.3s ease;
+    z-index: 995;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.1);
   }
 
   .header-contacts.active {
     right: 0;
+  }
+  
+  .contact-item {
+    justify-content: flex-start; /* В мобильном меню иконки слева */
   }
 
   .header-row {
     position: relative;
   }
 }
-.hero {
-  position: relative;
-  min-height: 60dvh;
-  background: url("../img/bnr.jpg") center / cover no-repeat;
-  display: flex;
-  align-items: center;
-  color: #fff;
-}
-
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.55);
-}
-
-.hero-content {
-  position: relative;
-  z-index: 2;
-  max-width: 600px;
-}
-
-.hero h1 {
-  font-size: 34px;
-  margin-bottom: 15px;
-  line-height: 42px;
-}
-
-.hero p {
-  font-size: 20px;
-  margin-bottom: 25px;
-}
-
