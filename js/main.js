@@ -1,84 +1,127 @@
-const popup = document.getElementById('popup');
-const openBtns = [document.getElementById('openForm'), document.getElementById('openForm2')];
-const closePopup = document.getElementById('closePopup');
-const form = document.getElementById('form');
-const success = document.getElementById('success');
+class UIController {
+  constructor() {
+    this.body = document.body;
+    this.overlay = document.getElementById('pageOverlay');
+    this.burger = document.getElementById('burger');
+    this.mobileMenu = document.getElementById('mobileMenu');
+    
+    this.contactModal = document.getElementById('contactOptions');
+    this.btnOpenContact = document.getElementById('openContact');
+    this.btnCloseContact = document.getElementById('closeContact');
+    
+    this.leadPopup = document.getElementById('popup');
+    this.btnClosePopup = document.getElementById('closePopup');
+    this.leadForm = document.getElementById('leadForm');
+    this.successMsg = document.getElementById('successMessage');
 
-const burger = document.getElementById('burger');
-const mobileMenu = document.getElementById('mobileMenu');
-
-burger.onclick = () => {
-  burger.classList.toggle('active');
-  mobileMenu.classList.toggle('active');
-};
-
-
-
-openBtns.forEach(btn => {
-  if (btn) btn.onclick = () => popup.style.display = 'flex';
-});
-
-closePopup.onclick = () => popup.style.display = 'none';
-
-form.onsubmit = e => {
-  e.preventDefault();
-
-  const formData = new FormData(form);
-
-  fetch('send.php', {
-    method: 'POST',
-    body: formData
-  })
-  .then(() => {
-    form.style.display = 'none';
-    success.style.display = 'block';
-
-    setTimeout(() => {
-      popup.style.display = 'none';
-      form.reset();
-      form.style.display = 'block';
-      success.style.display = 'none';
-    }, 3000);
-  });
-};
-
-
-
-const openBtn = document.getElementById('openContact');
-const modal = document.getElementById('contactOptions');
-const closeBtn = document.getElementById('closeContact');
-const owerfloydiv = document.querySelector('.owerfloy-div'); // элемент для overlay
-
-// Открытие модалки
-openBtn.addEventListener('click', () => {
-  modal.style.display = 'block';
-  document.body.style.overflow = 'hidden'; // блокируем скролл
-  if(owerfloydiv) {
-    owerfloydiv.classList.add('active'); // добавляем класс active
+    this.init();
   }
-});
 
-// Закрытие модалки
-closeBtn.addEventListener('click', () => {
-  modal.style.display = 'none';
-  document.body.style.overflow = ''; // восстанавливаем скролл
-  if(owerfloydiv) {
-    owerfloydiv.classList.remove('active'); // убираем класс active
+  init() {
+    this.bindEvents();
+    this.setCurrentYear();
   }
-});
 
-// Закрытие при клике вне модалки
-window.addEventListener('click', (e) => {
-  if(e.target === modal) {
-    modal.style.display = 'none';
-    document.body.style.overflow = '';
-    if(owerfloydiv) {
-      owerfloydiv.classList.remove('active');
+  bindEvents() {
+    if (this.burger) {
+      this.burger.addEventListener('click', () => this.toggleMobileMenu());
+    }
+
+    if (this.overlay) {
+      this.overlay.addEventListener('click', () => this.closeAllModals());
+    }
+
+    if (this.btnOpenContact) {
+      this.btnOpenContact.addEventListener('click', () => this.openContactModal());
+    }
+
+    if (this.btnCloseContact) {
+      this.btnCloseContact.addEventListener('click', () => this.closeAllModals());
+    }
+
+    if (this.btnClosePopup) {
+      this.btnClosePopup.addEventListener('click', () => this.closeAllModals());
+    }
+
+    if (this.leadForm) {
+      this.leadForm.addEventListener('submit', (e) => this.handleFormSubmit(e));
     }
   }
+
+  toggleMobileMenu() {
+    const isActive = this.mobileMenu.classList.toggle('active');
+    this.burger.classList.toggle('active', isActive);
+    this.burger.setAttribute('aria-expanded', isActive);
+    this.toggleOverlay(isActive);
+  }
+
+  openContactModal() {
+    this.contactModal.style.display = 'block';
+    this.toggleOverlay(true);
+    this.btnOpenContact.setAttribute('aria-expanded', 'true');
+  }
+
+  closeAllModals() {
+    if (this.mobileMenu.classList.contains('active')) {
+      this.mobileMenu.classList.remove('active');
+      this.burger.classList.remove('active');
+      this.burger.setAttribute('aria-expanded', 'false');
+    }
+
+    this.contactModal.style.display = 'none';
+    this.leadPopup.style.display = 'none';
+    if (this.btnOpenContact) this.btnOpenContact.setAttribute('aria-expanded', 'false');
+
+    this.toggleOverlay(false);
+  }
+
+  toggleOverlay(isActive) {
+    if (isActive) {
+      this.overlay.classList.add('active');
+      this.body.style.overflow = 'hidden';
+    } else {
+      this.overlay.classList.remove('active');
+      this.body.style.overflow = '';
+    }
+  }
+
+  async handleFormSubmit(e) {
+    e.preventDefault();
+    const formData = new FormData(this.leadForm);
+
+    try {
+      const response = await fetch('send.php', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (response.ok) {
+        this.leadForm.style.display = 'none';
+        this.successMsg.style.display = 'block';
+
+        setTimeout(() => {
+          this.closeAllModals();
+          this.leadForm.reset();
+          this.leadForm.style.display = 'block';
+          this.successMsg.style.display = 'none';
+        }, 3000);
+      } else {
+        alert('Ошибка при отправке. Пожалуйста, попробуйте связаться через WhatsApp.');
+      }
+    } catch (error) {
+      console.error('Ошибка отправки формы:', error);
+      alert('Ошибка соединения. Пожалуйста, попробуйте позже.');
+    }
+  }
+
+  setCurrentYear() {
+    const yearSpan = document.getElementById('currentYear');
+    if (yearSpan) {
+      yearSpan.textContent = new Date().getFullYear();
+    }
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  new UIController();
 });
-
-// Текущий год
-document.getElementById('year').textContent = new Date().getFullYear();
-
-
