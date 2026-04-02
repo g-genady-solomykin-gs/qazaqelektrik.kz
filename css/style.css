@@ -313,6 +313,10 @@ form textarea { resize: vertical; min-height: 100px; }
   .btn-large {
     font-size: 22px;
   }
+
+  .contact-arrow {
+    margin-top: 0;
+  }
   
   .header-contacts {
     position: fixed;
